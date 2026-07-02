@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kakao-instagram-collector"
+version = "0.1.0"
+description = "KakaoTalk open chat Instagram profile link collector"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "PyYAML>=6.0.1",
+    "psutil>=5.9.8",
+]
+
+[project.optional-dependencies]
+windows = ["uiautomation>=2.0.18"]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

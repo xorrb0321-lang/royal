@@ -1,0 +1,27 @@
+app:
+  name: "kakao-instagram-collector"
+  headless: true
+
+kakao:
+  process_name: "KakaoTalk.exe"
+  reconnect_interval_sec: 10
+  room_rescan_interval_sec: 60
+
+collector:
+  polling_interval_sec: 3
+  message_hash_cache_size: 1000
+  uia_retry_count: 3
+  uia_retry_base_delay_sec: 0.5
+
+database:
+  path: "data/instagram.db"
+
+logging:
+  directory: "logs"
+  level: "INFO"
+  max_bytes: 10485760
+  backup_count: 5
+
+parser:
+  # 오픈채팅방 제목 화이트리스트 (비어 있으면 열린 채팅방 전부 감시)
+  room_title_whitelist: []
