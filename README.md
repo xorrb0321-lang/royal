@@ -1,13 +1,14 @@
-# KakaoTalk Instagram Collector
+# KakaoTalk Export → Instagram Collector
 
-카카오톡 PC 오픈채팅방에서 Instagram 프로필 링크를 실시간 수집하는 Windows 프로그램입니다.
+카카오톡 PC **대화보내기(.txt)** 파일에서 Instagram 프로필 링크를 추출하는 프로그램입니다.
 
-## 요구 사항
+## 특징
 
-- Windows 10/11
-- Python 3.11+
-- 카카오톡 PC 실행
-- 오픈채팅방 10~20개 이상 열어둔 상태
+- **안전**: 카카오 API·UI 자동화·패킷 스니핑 없음
+- **파싱**: [kakaotalk-msg-preprocessor](https://github.com/uoneway/kakaotalk_msg_preprocessor) 오픈소스 사용
+- **Instagram만**: 프로필 URL → `username` 추출 (`/p/`, `/reel/` 제외)
+- **중복 제거**: 동일 username 1회만 저장 (SQLite + CSV)
+- **자동화**: `exports/` 폴더 감시 + 수동 파일 선택
 
 ## 설치
 
@@ -17,56 +18,67 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Windows 전용 UI Automation:
+## 사용법
+
+### 1. 카카오톡에서 대화보내기
+
+1. 오픈채팅방 입장
+2. `Ctrl + S` (또는 메뉴 → 대화 내용 → 대화보내기)
+3. `exports` 폴더에 저장
+
+### 2. 프로그램 실행
 
 ```bash
-pip install uiautomation
-```
+# GUI (기본)
+python main.py
 
-## 실행
-
-### Headless (24시간 실행)
-
-```bash
+# 콘솔 백그라운드
 python main.py --headless
+
+# 파일 1개 직접 처리
+python main.py --headless --file exports\방이름.txt
+
+# exports 폴더 1회 스캔
+python main.py --headless --scan-once
 ```
 
-### GUI
+### 3. 결과 확인
 
-```bash
-python main.py --gui
+- `output/instagram_accounts.csv` — 엑셀에서 열기
+- `data/state.db` — 중복 체크용 (내부)
+
+## CSV 컬럼
+
+| 컬럼 | 설명 |
+|------|------|
+| username | Instagram 계정 (예: abc) |
+| first_seen_at | 프로그램이 처음 저장한 시각 |
+| message_datetime | 대화 메시지 시각 |
+| author | 작성자 닉네임 |
+| room_name | 채팅방 (파일명 추정) |
+| source_url | 원본 Instagram URL |
+
+## 운영 주의사항
+
+- PC 카카오톡 **로그아웃 금지** (오픈채팅 과거 대화 복구 불가)
+- 오픈채팅방 **퇴장 금지**
+- **실시간 아님** — 보내기할 때마다 새 링크 반영
+- 2~3시간마다 방마다 `Ctrl+S` 보내기 권장
+
+자세한 내용: `docs/OPERATIONS.md`
+
+## 프로젝트 구조
+
 ```
-
-## 설정
-
-- `config/settings.yaml` — DB 경로, 폴링 주기, 재연결 간격
-- `config/selectors.yaml` — UI Automation selector (Phase 0 정찰 후 조정)
-
-### 채팅방 화이트리스트
-
-`config/settings.yaml`:
-
-```yaml
-parser:
-  room_title_whitelist:
-    - "오픈채팅"
+adapters/     kakaotalk-msg-preprocessor 래퍼
+ingest/       파일 로드, 폴더 감시, 분할 txt 병합
+filters/      시스템 메시지 제외, Instagram 추출
+parser/       URL 정규식, Instagram 정규화
+state/        SQLite (중복, fingerprint)
+exporter/     CSV 저장
+app/          파이프라인, 애플리케이션
+ui/           Tkinter GUI
 ```
-
-비어 있으면 열린 채팅방 전체를 감시합니다.
-
-## DB
-
-SQLite `data/instagram.db`
-
-```sql
-instagram_accounts (id, username UNIQUE, created_at)
-```
-
-## Phase 0 (필수)
-
-Windows에서 카카오톡 UI를 정찰한 뒤 `config/selectors.yaml`을 조정하세요.
-
-자세한 내용: `docs/ui-map.md`
 
 ## 테스트
 
@@ -75,20 +87,16 @@ pip install pytest
 pytest
 ```
 
-## 아키텍처
+## 설정
 
+`config/settings.yaml`:
+
+```yaml
+ingest:
+  watch_dir: "exports"
+  incremental: true
+
+export:
+  output_dir: "output"
+  csv_filename: "instagram_accounts.csv"
 ```
-app/         오케스트레이션
-collector/   Windows UI Automation
-parser/      URL / Instagram 정규화
-database/    SQLite
-config/      설정
-utils/       로그, 캐시, 재시도
-ui/          Tkinter UI (비즈니스 로직 없음)
-```
-
-## 주의
-
-- 카카오 공식 API를 사용하지 않습니다.
-- UI 구조 변경 시 selector 업데이트가 필요할 수 있습니다.
-- 이용 약관 및 관련 법규를 준수하여 사용하세요.

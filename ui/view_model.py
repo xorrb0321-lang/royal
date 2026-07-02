@@ -1,4 +1,4 @@
-"""상태 ViewModel."""
+"""UI ViewModel."""
 
 from __future__ import annotations
 
@@ -9,22 +9,24 @@ from app.application import ApplicationService, ApplicationState
 
 @dataclass
 class StatusViewModel:
-    """UI 표시용 상태."""
-
     running: bool
-    rooms: int
-    messages_processed: int
-    accounts_saved: int
+    files_processed: int
     total_accounts: int
+    new_accounts: int
+    duplicates_skipped: int
+    watch_dir: str
+    csv_path: str
 
     @classmethod
     def from_state(cls, state: ApplicationState) -> StatusViewModel:
         return cls(
             running=state.running,
-            rooms=state.rooms,
-            messages_processed=state.messages_processed,
-            accounts_saved=state.accounts_saved,
+            files_processed=state.files_processed,
             total_accounts=state.total_accounts,
+            new_accounts=state.new_accounts,
+            duplicates_skipped=state.duplicates_skipped,
+            watch_dir=state.watch_dir,
+            csv_path=state.csv_path,
         )
 
     @classmethod

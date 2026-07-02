@@ -1,12 +1,5 @@
-"""SQLite 데이터베이스 모듈."""
+"""데이터베이스 연결."""
 
 from database.connection import DatabaseConnection
-from database.repository import InstagramRepository, SaveResult
-from database.schema import SchemaManager
 
-__all__ = [
-    "DatabaseConnection",
-    "InstagramRepository",
-    "SaveResult",
-    "SchemaManager",
-]
+__all__ = ["DatabaseConnection"]

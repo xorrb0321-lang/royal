@@ -1,11 +1,12 @@
-"""애플리케이션 오케스트레이션."""
+"""애플리케이션 모듈."""
 
-from app.application import ApplicationService
-from app.coordinator import CollectorCoordinator
-from app.lifecycle import LifecycleManager
+from app.application import ApplicationService, ApplicationState
+from app.pipeline import ExportPipeline, PipelineResult, PipelineStats
 
 __all__ = [
     "ApplicationService",
-    "CollectorCoordinator",
-    "LifecycleManager",
+    "ApplicationState",
+    "ExportPipeline",
+    "PipelineResult",
+    "PipelineStats",
 ]

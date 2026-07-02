@@ -1,8 +1,9 @@
+exports/
+output/
 data/
 logs/
 __pycache__/
 *.py[cod]
-*.db
 .pytest_cache/
 .venv/
 venv/
