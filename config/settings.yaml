@@ -1,0 +1,24 @@
+app:
+  name: "kakao-instagram-collector"
+
+ingest:
+  watch_dir: "exports"
+  allowed_extensions:
+    - ".txt"
+  incremental: true
+
+export:
+  output_dir: "output"
+  csv_filename: "instagram_accounts.csv"
+
+instagram:
+  enabled: true
+
+database:
+  path: "data/state.db"
+
+logging:
+  directory: "logs"
+  level: "INFO"
+  max_bytes: 10485760
+  backup_count: 5

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kakao-instagram-collector"
+version = "0.2.0"
+description = "KakaoTalk export txt Instagram profile collector"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "kakaotalk-msg-preprocessor>=0.13",
+    "PyYAML>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
