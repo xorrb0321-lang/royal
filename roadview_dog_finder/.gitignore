@@ -1,0 +1,10 @@
+# 실행 결과/이미지/모델 가중치는 커밋하지 않음
+rdf_output/
+*.pt
+*.jpg
+*.jpeg
+*.png
+!docs/**/*.png
+__pycache__/
+*.pyc
+.venv/
