@@ -1,0 +1,26 @@
+# 로드뷰 강아지 탐색기 의존성
+#
+# 참고: GPU(NVIDIA RTX 3050 등) 가속을 쓰려면 torch를 CUDA 빌드로 먼저 설치하세요.
+# (아래 ultralytics가 CPU용 torch를 자동 설치하므로, GPU를 원하면 순서가 중요합니다)
+#
+#   # 1) CUDA용 torch 먼저 (CUDA 12.1 예시)
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+#   # 2) 그 다음 나머지
+#   pip install -r requirements.txt
+
+# 파노라마 수집/다운로드 (네이버·카카오 지원, API키 불필요)
+streetlevel>=0.12.0
+
+# 경계/도로망 (OpenStreetMap)
+osmnx>=2.0.0
+shapely>=2.0.0
+pyproj>=3.5.0
+
+# 이미지 처리
+pillow>=10.0.0
+
+# 강아지 탐지 (YOLO). torch를 자동으로 끌어온다(기본 CPU).
+ultralytics>=8.2.0
+
+# 결과 지도 HTML
+folium>=0.16.0
